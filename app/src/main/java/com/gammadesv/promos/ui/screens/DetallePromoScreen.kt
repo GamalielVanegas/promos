@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,8 +46,13 @@ fun DetallePromoScreen(
             CenterAlignedTopAppBar(
                 title = { Text("Detalle Promoción") },
                 navigationIcon = {
-                    IconButton(onClick = { navController?.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    if (navController != null) {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Volver"
+                            )
+                        }
                     }
                 }
             )
@@ -58,15 +63,13 @@ fun DetallePromoScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            } else {
-                promo?.let { PromoDetalleContent(it) } ?: run {
-                    Text(
-                        "Promoción no encontrada",
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
+            when {
+                isLoading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                promo == null -> Text(
+                    "Promoción no encontrada",
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                else -> PromoDetalleContent(promo!!)
             }
         }
     }
@@ -84,6 +87,7 @@ private fun PromoDetalleContent(promo: Promocion) {
                 painter = rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current)
                         .data(promo.imagenUrl)
+                        .crossfade(true)
                         .build()
                 ),
                 contentDescription = "Imagen promoción",
@@ -98,7 +102,8 @@ private fun PromoDetalleContent(promo: Promocion) {
         Text(
             text = promo.tipo,
             fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -115,7 +120,11 @@ private fun PromoDetalleContent(promo: Promocion) {
 }
 
 @Composable
-private fun PromoDetailItem(label: String, value: String, color: Color = Color.Unspecified) {
+private fun PromoDetailItem(
+    label: String,
+    value: String,
+    color: Color = Color.Unspecified
+) {
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
         Text(
             text = label,
@@ -125,7 +134,8 @@ private fun PromoDetailItem(label: String, value: String, color: Color = Color.U
         Text(
             text = value,
             fontSize = 16.sp,
-            color = if (color != Color.Unspecified) color else MaterialTheme.colorScheme.onSurface
+            color = color.takeIf { it != Color.Unspecified }
+                ?: MaterialTheme.colorScheme.onSurface
         )
     }
 }

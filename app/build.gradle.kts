@@ -137,10 +137,13 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.7") // Para @Preview
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.7") // Para ver previsualizaciones
-    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-firestore")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation("androidx.compose.material3:material3:1.2.0") // Añadido
+    implementation("androidx.navigation:navigation-compose:2.7.7") // Añadido
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
 
 

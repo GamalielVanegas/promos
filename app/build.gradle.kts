@@ -42,12 +42,10 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4"  // Añadido para Compose
+        kotlinCompilerExtensionVersion = libs.versions.compose.test.get()  // Añadido para Compose
     }
     packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
 }
 
